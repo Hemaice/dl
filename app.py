@@ -13,7 +13,7 @@ l=['0','1','2','3','4','5','6','7','8','9']
 model = load_model("model.h5")
 
 uploaded_file = st.file_uploader(
-    "Upload an image of a digit :", type="png"
+    "Upload an image of a digit :", type="jpg"
 )
 predictions=-1
 if uploaded_file is not None:
