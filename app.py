@@ -1,7 +1,6 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-import cv2
 from PIL import Image
 
 # Load your trained CNN model
@@ -23,8 +22,10 @@ if option == 'Draw Digit':
         digit_image = canvas.image_data.astype(np.uint8)
 
         # Resize the image to 28x28 pixels and preprocess it
-        digit_image = cv2.resize(digit_image, (28, 28))
-        digit_image = digit_image[:, :, 3]  # Extract alpha channel
+        pil_image = Image.fromarray(digit_image)
+        pil_image = pil_image.convert('L')  # Convert to grayscale
+        pil_image = pil_image.resize((28, 28))
+        digit_image = np.array(pil_image)
         digit_image = digit_image / 255.0  # Normalize pixel values
 
         # Make a prediction
@@ -32,7 +33,7 @@ if option == 'Draw Digit':
         prediction = model.predict(digit_image)
         predicted_class = np.argmax(prediction)
 
-        st.image(digit_image.squeeze(), caption='Drawn Digit', use_column_width=True)
+        st.image(pil_image, caption='Drawn Digit', use_column_width=True)
         st.write(f'Predicted Digit: {predicted_class}')
 
 elif option == 'Upload Image':
